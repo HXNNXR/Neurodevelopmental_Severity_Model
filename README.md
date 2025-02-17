@@ -1,95 +1,36 @@
 # Neurodevelopmental Severity Prediction Model  
 
-## Introduction  
+Neurodevelopmental disorders in early childhood can have a significant impact on long-term cognitive, social, and motor development. I wanted to explore whether machine learning could be used to predict the severity of developmental difficulties in Sri Lankan children. The goal was to see if a data-driven approach could contribute to early identification and intervention strategies in public health.  
 
-Neurodevelopmental disorders in early childhood can affect cognitive, social, and motor development. I wanted to see if machine learning could help predict the severity of developmental difficulties in Sri Lankan children. The idea was to explore whether a data-driven approach could assist in public health decision-making and early intervention strategies.  
+For this project, I used data from the Sri Lanka Demographic and Health Survey (DHS) 2016, specifically the child disability module. The dataset includes responses from mothers of children aged 2-5 years on their child’s speech clarity, vision, motor function, and cognitive abilities. Since the dataset focuses on functional difficulties rather than clinical diagnoses, I thought it would be useful for predicting relative risk rather than providing definitive conclusions. After loading the dataset, I noticed missing values and formatting inconsistencies, so I cleaned it by filling missing values using mean/mode imputation, selecting key features related to developmental difficulties, and converting categorical variables into a numerical format for standardization. Once the dataset was processed, I split it into an 80/20 training and testing set. The final dataset consisted of 40 training samples and 10 test samples, which wasn’t a large dataset but enough for an initial model test.  
 
-## Data Collection & Processing  
+I started with a simple linear regression model to check for basic relationships between features and developmental severity. The model produced a mean absolute error of 0.79 and an R² score of 0.64, which indicated some predictive power but also suggested that a more advanced approach was needed. I then tested a Random Forest Regression model, which performed slightly better with an R² score of 0.32, while an XGBoost Regression model performed worse with an R² of only 0.09. Since Random Forest performed best, I optimized its hyperparameters through grid search, which resulted in a final R² score of 0.25. Although this was an improvement, the model still has significant room for refinement, particularly in terms of handling non-linear interactions and increasing accuracy.  
 
-I used data from the **Sri Lanka Demographic and Health Survey (DHS) 2016**, specifically the child disability module. The dataset includes responses from mothers of children aged 2-5 years on different types of developmental difficulties, including speech clarity, vision, motor skills, and cognitive development.  
-
-Since this dataset focuses on **functional difficulties rather than clinical diagnoses**, I thought it would be useful for predicting relative risk rather than confirming conditions.  
-
-When I first loaded the dataset, I noticed missing values and formatting inconsistencies. To clean and prepare it for modeling, I:  
-- Filled missing values using mean/mode imputation  
-- Selected key features related to speech, motor function, and cognitive abilities  
-- Converted categorical variables into numerical format  
-- Standardized features for consistency  
-
-After cleaning, I split the data into an **80/20 training and testing set**. The final dataset contained **40 training samples and 10 test samples**, which wasn’t a lot but was enough for an initial test.  
-
-## Model Development  
-
-I started with a simple linear regression model to test basic relationships between features and severity.  
-
-**Linear Regression Results:**  
-- Mean Absolute Error (MAE): 0.79  
-- Mean Squared Error (MSE): 1.59  
-- R² Score: 0.64  
-
-While the model captured some patterns, it struggled with non-linear interactions, so I tested more advanced models.  
-
-I ran a **Random Forest Regression**, which performed better than linear regression but still had room for improvement:  
-
-**Random Forest Results:**  
-- MAE: 1.23  
-- MSE: 3.02  
-- R² Score: 0.32  
-
-I also tested **XGBoost Regression**, but it performed worse:  
-
-**XGBoost Results:**  
-- MAE: 1.50  
-- MSE: 3.99  
-- R² Score: 0.09  
-
-Since Random Forest was the best-performing model, I fine-tuned it using grid search to optimize hyperparameters.  
-
-**Optimized Random Forest Results:**  
-- MAE: 1.29  
-- MSE: 3.33  
-- R² Score: 0.25  
-
-Although tuning improved the model, it’s still not highly accurate, so further refinement is needed.  
-
-## Feature Importance Analysis  
-
-I ran a feature importance analysis to see which factors influenced predictions the most.  
+To understand which factors had the biggest impact on predictions, I ran a feature importance analysis. The most influential predictors were speech clarity, vision difficulties, cognitive slowness, and the presence of convulsions or fits. Interestingly, hearing difficulties contributed very little to the model, suggesting it may not be a strong indicator in this dataset. The feature importance ranking is shown below:  
 
 | Feature                         | Importance Score |
-|--------------------------------|----------------|
-| Child’s speech clarity           | 21.5%          |
-| Vision difficulties              | 18.8%          |
-| Cognitive slowness indicators     | 17.2%          |
-| Presence of convulsions/fits      | 9.7%           |
-| Can’t understand words            | 9.0%           |
+|---------------------------------|----------------|
+| Child’s speech clarity          | 21.5%          |
+| Vision difficulties             | 18.8%          |
+| Cognitive slowness indicators   | 17.2%          |
+| Presence of convulsions/fits    | 9.7%           |
+| Can’t understand words          | 9.0%           |
+| Difficulty in walking/movement  | 4.5%           |
+| Late in standing/walking        | 4.3%           |
+| Hearing difficulties            | 1.3%           |
 
-Surprisingly, **hearing difficulties had little impact (1.3%)**, suggesting it may not be a strong predictor in this dataset.  
+Although the Random Forest model performed best, the results still indicated a need for improvement. Below is a comparison of the models I tested:  
 
-## Findings & Next Steps  
+| Model                     | Mean Absolute Error (MAE) | Mean Squared Error (MSE) | R² Score |
+|---------------------------|--------------------------|--------------------------|----------|
+| **Linear Regression**      | 0.79                     | 1.59                     | 0.64     |
+| **Random Forest**         | 1.23                     | 3.02                     | 0.32     |
+| **XGBoost**               | 1.50                     | 3.99                     | 0.09     |
+| **Optimized Random Forest** | 1.29                     | 3.33                     | 0.25     |
 
-The model has potential but is currently limited by dataset size and complexity. Right now, the main issues are:  
-- **Small dataset size** – The training data is limited, making generalization difficult.  
-- **Severity score variation** – More granular data on neurodevelopmental severity would likely improve predictions.  
-- **Non-linear relationships** – A different model, such as an ensemble approach, may capture these better.  
+At this stage, the model is functional but needs further refinement. The biggest limitations are the small dataset, limited variance in severity scores, and the challenge of capturing non-linear relationships. Moving forward, I plan to expand the dataset, test alternative models such as ensemble learning, and refine feature selection to improve predictive accuracy. There is also potential to validate the model against real-world clinical assessments, which could help make the predictions more applicable in practice.  
 
-For the next steps, I plan to:  
-- Expand the dataset with additional child health records.  
-- Test alternative models, including ensemble methods.  
-- Refine feature selection to improve predictive accuracy.  
-- Validate predictions against real-world clinical assessments.  
+If improved, this model could be useful for public health agencies assessing child development risks, policy discussions on early intervention strategies, and research into neurodevelopmental disorders in Sri Lanka. The repository contains the trained Random Forest model file, a CSV with ranked feature importance, and a Jupyter Notebook documenting the full process, including data preprocessing, model training, and evaluation.  
 
-## Potential Applications  
+This is just the first iteration of the model, and I’ll be working on improvements over time. Let me know your thoughts or if you have any suggestions.  
 
-If improved, this model could help identify children at higher risk of developmental difficulties. It could be useful for:  
-- Public health agencies assessing risk factors in early childhood.  
-- Policy discussions on early intervention programs.  
-- Research into neurodevelopmental disorders in Sri Lanka.
-- 
-## Repository Contents  
-
-- `neurodevelopmental_severity_model.pkl` – Trained Random Forest model  
-- `feature_importance.csv` – Feature ranking from importance analysis  
-- Jupyter Notebook – Full code for preprocessing, model training, and evaluation  
-
-This is the first iteration of the model, and I’ll be improving it over time. Let me know your thoughts or if you have any suggestions for making it better.  
