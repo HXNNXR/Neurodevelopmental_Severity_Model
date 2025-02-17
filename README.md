@@ -32,5 +32,5 @@ At this stage, the model is functional but needs further refinement. The biggest
 
 If improved, this model could be useful for public health agencies assessing child development risks, policy discussions on early intervention strategies, and research into neurodevelopmental disorders in Sri Lanka. The repository contains the trained Random Forest model file, a CSV with ranked feature importance, and a Jupyter Notebook documenting the full process, including data preprocessing, model training, and evaluation.  
 
-This is just the first iteration of the model, and I’ll be working on improvements over time. Let me know your thoughts or if you have any suggestions.  
+This is just the first iteration of the model, and I’ll be working on improvements over time. Let me know your thoughts or if you have any suggestions!
 
